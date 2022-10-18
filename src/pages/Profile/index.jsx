@@ -4,7 +4,7 @@ import { format, formatISO } from 'date-fns'
 import { useLocalStorage, useAsyncFn } from 'react'
 import axios from 'axios'
 
-import { Icon, Card, DateSelect } from './../../components'
+import { Icon, Card, DateSelect } from '~/components'
 
 
 export const Profile = () => {

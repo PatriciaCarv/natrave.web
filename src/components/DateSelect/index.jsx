@@ -1,6 +1,6 @@
 import { addDays, subDays, format, formatISO } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { Icon } from './../../components/icon'
+import { Icon } from '~/components/icon'
 
 export const DateSelect = ({ currentDate, onChange }) => {
     const date = new Date(currentDate)

@@ -4,7 +4,7 @@ import * as yup from 'yup'
 import { Navigate } from 'react-router-dom'
 import { useLocalStorage } from 'react-use'
 
-import { Icon, Input } from './../../components'
+import { Icon, Input } from '~/components'
 
  const validationSchema = yup.object().shape({
     name: yup.string().required('Preencha seu nome'),

@@ -4,7 +4,7 @@ import { useLocalStorage, useAsyncFn } from 'react-use'
 import axios from 'axios'
 import { format, formatISO } from 'date-fns'
 
-import { Icon, Card, DateSelect } from './../../components'
+import { Icon, Card, DateSelect } from '~/components'
 
 export const Dashboard = () => {
     const [currentDate, setDate] = useState(formatISO(new Date(2022, 10, 20)))
