@@ -36,7 +36,7 @@ export const Login = () => {
     })
 
     if (auth?.user?.id) {
-        return <Navigate to="/dasboard" replace={true} />
+        return <Navigate to="/dashboard" replace={true} />
 
     }
     return (

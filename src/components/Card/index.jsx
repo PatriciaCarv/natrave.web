@@ -11,14 +11,16 @@ const validationSchema = yup.object().shape({
 
 export const Card = ({disabled, gameId, homeTeam, awayTeam, homeTeamScore, awayTeamScore, gameTime} ) =>{
     const [auth] = useLocalStorage('auth')
-    const formik = useFormik({
+    const formik = useFormik({        
         onSubmit: (values) => {
+            values.homeTeamScore = values.homeTeamScore.toString()
+            values.awayTeamScore = values.awayTeamScore.toString()
             axios({
                 method: 'post',
                 baseURL: import.meta.env.VITE_API_URL,
                 url: '/hunches',
                 headers: {
-                    authorization: `Bearer ${auth.acessToken}`
+                    authorization: `Bearer ${auth.accessToken}`
                 },
                 data: {
                     ...values,

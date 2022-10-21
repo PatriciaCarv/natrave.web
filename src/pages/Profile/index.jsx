@@ -1,37 +1,34 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { format, formatISO } from 'date-fns'
-import { useLocalStorage, useAsyncFn } from 'react'
+import { useLocalStorage, useAsyncFn } from 'react-use'
 import axios from 'axios'
 
 import { Icon, Card, DateSelect } from '~/components'
 
 
 export const Profile = () => {
-    const params = useParams()
+    const [auth, setAuth] = useLocalStorage('auth', {})
+    // const params = useParams()
     const navigate = useNavigate ()
 
     const [currentDate, setDate] = useState(formatISO(new Date(2022, 10, 20)))
-    const [auth, setAuth] = useLocalStorage('auth', {})
+    
 
-    const [user, fetchHunches] = useAsyncFn(async () => {
+    const [hunches, fetchHunches] = useAsyncFn(async () => {
         const res = await axios ({
             method: 'get',
             baseURL: import.meta.env.VITE_API_URL,
-            url: `/${params.username}`,
+            url: `/${auth.user.username}`,
             
         })
 
-        const hunches = res.data.hunches.reduce((acc, hunch) => {
+        const hunchesMap = res.data.hunches.reduce((acc, hunch) => {
             acc[hunch.gameId] = hunch
             return acc
         }, {})
 
-        return {
-            ...res.data,
-            hunches
-        }
-
+        return hunchesMap
     }) 
     
     const [games, fetchGames] = useAsyncFn(async (params) => {
@@ -50,8 +47,8 @@ const logout = () => {
     navigate('/login')
 }
 
-const isLoading = games.loading || user.loading
-const hasError = games.error || user.error
+const isLoading = games.loading || hunches.loading
+const hasError = games.error || hunches.error
 const isDone = !isLoading && !hasError
 
 useEffect (() => {
@@ -79,7 +76,7 @@ return (
                         <a href="/dashboard">
                             <Icon name="back" className="w-10"/>
                         </a>
-                        <h3 className="text-2xl font-bold">{ user.value.name }</h3>
+                        <h3 className="text-2xl font-bold">{ auth.user.name }</h3>
                     </div>
                 </section>
 
@@ -92,7 +89,7 @@ return (
                         {isLoading && 'Carregando jogos...'}
                         {hasError && 'Ops! Algo deu errado'}
 
-                        {!isDone && games.value?.map(game => (
+                        {isDone && games.value?.map(game => (
 
                             <Card
                                 key={game.id}    

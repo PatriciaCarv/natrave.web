@@ -1,7 +1,7 @@
+import axios from 'axios'
 import { useState, useEffect } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useLocalStorage, useAsyncFn } from 'react-use'
-import axios from 'axios'
 import { format, formatISO } from 'date-fns'
 
 import { Icon, Card, DateSelect } from '~/components'
@@ -18,34 +18,33 @@ export const Dashboard = () => {
             
         })
 
-        const hunches = res.data.reduce((acc, hunch) => {
+        const hunchesMap = res.data.hunches.reduce((acc, hunch) => {
             acc[hunch.gameId] = hunch
             return acc
         }, {})
 
-        return hunches
-
+        return hunchesMap
     }) 
     
     const [games, fetchGames] = useAsyncFn(async (params) => {
         const res = await axios ({
-        method: 'get',
-        baseURL: import.meta.env.VITE_API_URL,
-        url: '/games',
-        params
+            method: 'get',
+            baseURL: import.meta.env.VITE_API_URL,
+            url: '/games',
+            params
+        })
+
+        return res.data
     })
+    
+    const isLoading = games.loading || hunches.loading
+    const hasError = games.error || hunches.error
+    const isDone = !isLoading && !hasError
 
-    return res.data
-})
-
-const isLoading = games.loading || hunches.loading
-const hasError = games.error || hunches.error
-const isDone = !isLoading && !hasError
-
-useEffect (() => {
-    fetchGames({gameTime: currentDate})
-    fetchHunches()
-}, [currentDate])
+    useEffect (() => {
+        fetchGames({gameTime: currentDate})
+        fetchHunches()
+    }, [currentDate])
 
     if (!auth?.user?.id) {
         return <Navigate to="/" replace={true} />
@@ -67,7 +66,7 @@ useEffect (() => {
         <main className="space-y-6">
             <section id="header" className="bg-red-500 text-white">
                 <div className=" container max-w-3xl space-y-2 p-4">
-                    <span>Olá Patrícia,</span>
+                    <span>Olá {auth.user.name},</span>
                     <h3 className="text-2xl font-bold">Qual é o seu palpite?</h3>
                 </div>
             </section>
@@ -80,18 +79,24 @@ useEffect (() => {
                     {isLoading && 'Carregando jogos...'}
                     {hasError && 'Ops! Algo deu errado'}
 
-                    {!isDone && games.value?.map(game => (
-
-                        <Card
-                            key={game.id}    
-                            gameId={game.id}
-                            homeTeam={game.homeTeam}
-                            awayTeam={game.awayTeam}
-                            gameTime={format (new Date(game.gameTime), 'H:mm')}
-                            homeTeamScore={hunches?.value?.[game.id]?.homeTeamScore || '0'}
-                            awayTeamScore={hunches?.value?.[game.id]?.awayTeamScore || '0'}
-                        />
-                    ))}
+                    {isDone && games.value?.map(game => 
+                    {
+                        let home = '';
+                        let away = '';
+                        home = hunches?.value?.[game.id]?.homeTeamScore.toString()
+                        away = hunches?.value?.[game.id]?.awayTeamScore.toString()
+                        return (
+                            <Card
+                                key={game.id}    
+                                gameId={game.id}
+                                homeTeam={game.homeTeam}
+                                awayTeam={game.awayTeam}
+                                gameTime={format (new Date(game.gameTime), 'H:mm')}
+                                homeTeamScore={home}
+                                awayTeamScore={away}
+                            />
+                        )
+                        })}
 
                 </div>
 
