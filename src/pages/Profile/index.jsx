@@ -89,19 +89,24 @@ return (
                         {isLoading && 'Carregando jogos...'}
                         {hasError && 'Ops! Algo deu errado'}
 
-                        {isDone && games.value?.map(game => (
+                        {isDone && games.value?.map(game => {
+                            let home = '';
+                            let away = '';
+                            home = hunches?.value?.[game.id]?.homeTeamScore.toString()
+                            away = hunches?.value?.[game.id]?.awayTeamScore.toString()
 
-                            <Card
-                                key={game.id}    
-                                gameId={game.id}
-                                homeTeam={game.homeTeam}
-                                awayTeam={game.awayTeam}
-                                gameTime={format (new Date(game.gameTime), 'H:mm')}
-                                homeTeamScore={hunches?.value?.[game.id]?.homeTeamScore || ''}
-                                awayTeamScore={hunches?.value?.[game.id]?.awayTeamScore || ''}
-                                disabled={true}
-                            />
-                        ))}
+                            return(
+                                <Card
+                                    key={game.id}    
+                                    gameId={game.id}
+                                    homeTeam={game.homeTeam}
+                                    awayTeam={game.awayTeam}
+                                    gameTime={format (new Date(game.gameTime), 'H:mm')}
+                                    homeTeamScore={home}
+                                    awayTeamScore={away}
+                                    disabled={true}
+                                />)
+                        })}
 
                     </div> 
 
