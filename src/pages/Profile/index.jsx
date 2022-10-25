@@ -19,11 +19,11 @@ export const Profile = () => {
         const res = await axios ({
             method: 'get',
             baseURL: import.meta.env.VITE_API_URL,
-            url: `/${auth.user.username}`,
+            url: `/hunches/${auth.user.username}`,
             
         })
 
-        const hunchesMap = res.data.hunches.reduce((acc, hunch) => {
+        const hunchesMap = res.data.reduce((acc, hunch) => {
             acc[hunch.gameId] = hunch
             return acc
         }, {})

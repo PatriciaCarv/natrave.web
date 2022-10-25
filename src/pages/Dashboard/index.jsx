@@ -14,11 +14,11 @@ export const Dashboard = () => {
         const res = await axios ({
             method: 'get',
             baseURL: import.meta.env.VITE_API_URL,
-            url: `/${auth.user.username}`,
+            url: `/hunches/${auth.user.username}`,
             
         })
 
-        const hunchesMap = res.data.hunches.reduce((acc, hunch) => {
+        const hunchesMap = res.data.reduce((acc, hunch) => {
             acc[hunch.gameId] = hunch
             return acc
         }, {})
@@ -94,6 +94,7 @@ export const Dashboard = () => {
                                 gameTime={format (new Date(game.gameTime), 'H:mm')}
                                 homeTeamScore={home}
                                 awayTeamScore={away}
+                                disabled={false}
                             />
                         )
                         })}
