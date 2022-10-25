@@ -10,7 +10,7 @@ export function Home() {
 }
 
   return (
-    <div className="h-screen bg-red-700 text-white p-4 flex flex-col items-center space-y-6">
+    <div className="h-full bg-red-700 text-white p-4 flex flex-col items-center space-y-6">
 
    <header className="container flex justify-center  max-w-5xl p-4">
     <img src="/imgs/logo-fundo-vinho.svg" className="w-40"/>
@@ -25,7 +25,7 @@ export function Home() {
       <div className="md:flex-1 flex flex-col space-y-6">
         <h1 className="text-3xl text-center md:text-left font-bold">Dê o seu palpite na Copa do Mundo do Catar 2022!</h1>
 
-        <a href="/signup" className="text-center text-red-700 bg-white text-xl px-8 py-4 rounded-xl">
+        <a href="/signup" className="text-red-700 text-center bg-white text-xl px-8 py-4 rounded-xl">
         Criar minha conta
         </a>
 
